@@ -386,11 +386,8 @@ def edit_fillup(fillup_id):
         fillup.liters = float(request.form['liters'])
         fillup.price_per_liter = float(request.form['price_per_liter'])
 
-        total_cost_str = request.form.get('total_cost', '').strip()
-        if total_cost_str:
-            fillup.total_cost = int(total_cost_str)
-        else:
-            fillup.total_cost = int(fillup.liters * fillup.price_per_liter)
+        fillup.total_cost = int(fillup.liters * fillup.price_per_liter)
+
 
         fillup.gas_station = request.form.get('gas_station', '')
         fillup.fuel_type = request.form.get('fuel_type', 'АИ-95')
@@ -449,11 +446,7 @@ def edit_fillup(fillup_id):
                     <input type="number" name="price_per_liter" step="0.01" value="{fillup.price_per_liter}" required>
                 </label>
             </p>
-            <p>
-                <label>Общая стоимость (₽):
-                    <input type="number" name="total_cost" value="{fillup.total_cost}">
-                </label>
-            </p>
+            
             <p>
                 <button type="submit">Сохранить изменения</button>
             </p>
