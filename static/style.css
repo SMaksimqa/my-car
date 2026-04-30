@@ -183,3 +183,22 @@ button.delete-btn:hover {
     font-size: 14px;
     color: #718096;
 }
+
+/* Кнопка редактирования */
+.edit-btn {
+    display: inline-block;
+    background: #3182ce;
+    color: white;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 4px;
+    transition: background 0.2s;
+}
+
+.edit-btn:hover {
+    background: #2c5282;
+    color: white;
+    text-decoration: none;
+}

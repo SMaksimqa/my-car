@@ -171,6 +171,94 @@ def delete_service(service_id):
     return redirect(url_for('services'))
 
 
+@app.route('/services/edit/<int:service_id>', methods=['GET', 'POST'])
+def edit_service(service_id):
+    service = Service.query.get_or_404(service_id)
+
+    if request.method == 'POST':
+        # Обновляем поля существующей записи
+        date_str = request.form['date']
+        service.date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        service.mileage = int(request.form['mileage'])
+        service.service_type = request.form['service_type']
+        service.description = request.form.get('description', '')
+        service.workshop = request.form.get('workshop', '')
+
+        cost = request.form.get('cost')
+        service.cost = int(cost) if cost else None
+
+        next_service_mileage = request.form.get('next_service_mileage')
+        service.next_service_mileage = int(next_service_mileage) if next_service_mileage else None
+
+        db.session.commit()
+
+        return redirect(url_for('services'))
+
+    # GET-запрос: показываем форму с заполненными данными
+    return f'''
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Редактировать запись</title>
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+        <a href="/services" class="back-link">← К списку</a>
+        <h1>✏️ Редактировать запись</h1>
+
+        <form method="POST">
+            <p>
+                <label>Дата:
+                    <input type="date" name="date" value="{service.date}" required>
+                </label>
+            </p>
+            <p>
+                <label>Пробег (км):
+                    <input type="number" name="mileage" value="{service.mileage}" required>
+                </label>
+            </p>
+            <p>
+                <label>Тип работы:
+                    <select name="service_type" required>
+                        <option value="ТО" {'selected' if service.service_type == 'ТО' else ''}>Регламентное ТО</option>
+                        <option value="Ремонт" {'selected' if service.service_type == 'Ремонт' else ''}>Ремонт</option>
+                        <option value="Расходник" {'selected' if service.service_type == 'Расходник' else ''}>Замена расходника</option>
+                        <option value="Шиномонтаж" {'selected' if service.service_type == 'Шиномонтаж' else ''}>Шиномонтаж</option>
+                        <option value="Кузовной" {'selected' if service.service_type == 'Кузовной' else ''}>Кузовной</option>
+                        <option value="Другое" {'selected' if service.service_type == 'Другое' else ''}>Другое</option>
+                    </select>
+                </label>
+            </p>
+            <p>
+                <label>Описание:
+                    <textarea name="description" rows="3">{service.description or ''}</textarea>
+                </label>
+            </p>
+            <p>
+                <label>Сервис:
+                    <input type="text" name="workshop" value="{service.workshop or ''}">
+                </label>
+            </p>
+            <p>
+                <label>Стоимость (₽):
+                    <input type="number" name="cost" value="{service.cost or ''}">
+                </label>
+            </p>
+            <p>
+                <label>Следующее ТО (пробег, км):
+                    <input type="number" name="next_service_mileage" value="{service.next_service_mileage or ''}">
+                </label>
+            </p>
+            <p>
+                <button type="submit">Сохранить изменения</button>
+            </p>
+        </form>
+    </body>
+    </html>
+    '''
+
+
 @app.route('/fillups/new', methods=['GET', 'POST'])
 def new_fillup():
     if request.method == 'POST':
@@ -285,6 +373,95 @@ def delete_fillup(fillup_id):
     return redirect(url_for('fillups'))
 
 
+@app.route('/fillups/edit/<int:fillup_id>', methods=['GET', 'POST'])
+def edit_fillup(fillup_id):
+    fillup = Fillup.query.get_or_404(fillup_id)
+
+    if request.method == 'POST':
+        date_str = request.form.get('date', '').strip()
+        if date_str:
+            fillup.date = datetime.strptime(date_str, '%Y-%m-%d').date()
+
+        fillup.mileage = int(request.form['mileage'])
+        fillup.liters = float(request.form['liters'])
+        fillup.price_per_liter = float(request.form['price_per_liter'])
+
+        total_cost_str = request.form.get('total_cost', '').strip()
+        if total_cost_str:
+            fillup.total_cost = int(total_cost_str)
+        else:
+            fillup.total_cost = int(fillup.liters * fillup.price_per_liter)
+
+        fillup.gas_station = request.form.get('gas_station', '')
+        fillup.fuel_type = request.form.get('fuel_type', 'АИ-95')
+
+        db.session.commit()
+        return redirect(url_for('fillups'))
+
+    return f'''
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Редактировать заправку</title>
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+        <a href="/fillups" class="back-link">← К списку</a>
+        <h1>✏️ Редактировать заправку</h1>
+
+        <form method="POST">
+            <p>
+                <label>Дата:
+                    <input type="date" name="date" value="{fillup.date}">
+                </label>
+            </p>
+            <p>
+                <label>Пробег (км):
+                    <input type="number" name="mileage" value="{fillup.mileage}" required>
+                </label>
+            </p>
+            <p>
+                <label>АЗС:
+                    <select name="gas_station">
+                        <option value="" {'selected' if not fillup.gas_station else ''}>— выбрать —</option>
+                        <option value="Лукойл" {'selected' if fillup.gas_station == 'Лукойл' else ''}>Лукойл</option>
+                        <option value="Газпром" {'selected' if fillup.gas_station == 'Газпром' else ''}>Газпром</option>
+                        <option value="Роснефть" {'selected' if fillup.gas_station == 'Роснефть' else ''}>Роснефть</option>
+                    </select>
+                </label>
+            </p>
+            <p>
+                <label>Тип топлива:
+                    <select name="fuel_type">
+                        <option value="АИ-92" {'selected' if fillup.fuel_type == 'АИ-92' else ''}>АИ-92</option>
+                        <option value="АИ-95" {'selected' if fillup.fuel_type == 'АИ-95' else ''}>АИ-95</option>
+                    </select>
+                </label>
+            </p>
+            <p>
+                <label>Литры:
+                    <input type="number" name="liters" step="0.01" value="{fillup.liters}" required>
+                </label>
+            </p>
+            <p>
+                <label>Цена за литр (₽):
+                    <input type="number" name="price_per_liter" step="0.01" value="{fillup.price_per_liter}" required>
+                </label>
+            </p>
+            <p>
+                <label>Общая стоимость (₽):
+                    <input type="number" name="total_cost" value="{fillup.total_cost}">
+                </label>
+            </p>
+            <p>
+                <button type="submit">Сохранить изменения</button>
+            </p>
+        </form>
+    </body>
+    </html>
+    '''
+
 
 @app.route('/')
 def home():
@@ -361,10 +538,12 @@ def services():
             <td>{s.workshop or '—'}</td>
             <td>{s.cost or 0} ₽</td>
             <td>
+                <a href="/services/edit/{s.id}" class="edit-btn">✏️</a>
                 <form method="POST" action="/services/delete/{s.id}" style="display: inline;" onsubmit="return confirm('Точно удалить?');">
                     <button type="submit" class="delete-btn">🗑️</button>
                 </form>
             </td>
+
         </tr>
         '''
 
@@ -438,10 +617,12 @@ def fillups():
             <td>{f.price_per_liter} ₽/л</td>
             <td>{f.total_cost} ₽</td>
             <td>
+                <a href="/fillups/edit/{f.id}" class="edit-btn">✏️</a>
                 <form method="POST" action="/fillups/delete/{f.id}" style="display: inline;" onsubmit="return confirm('Точно удалить?');">
                     <button type="submit" class="delete-btn">🗑️</button>
                 </form>
             </td>
+
         </tr>
         '''
 
