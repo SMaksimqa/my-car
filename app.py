@@ -463,37 +463,33 @@ def home():
         return '<h1>Машина пока не добавлена</h1>'
 
     return f'''
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title>Мой Селтос</title>
-        <link rel="stylesheet" href="/static/style.css">
-    </head>
-    <body>
-        <h1>🚗 Мой автомобиль</h1>
-
-        <div class="nav-menu">
-            <a href="/services">📋 Обслуживание</a>
-            <a href="/fillups">⛽️ Заправки</a>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Селтос</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body style="padding: 0; max-width: none;">
+    <section class="hero">
+        <img src="/static/inside_car_sunset.jpg" alt="Kia Seltos" class="hero-image">
+<div class="hero-overlay">
+    <div class="hero-nav">
+        <a href="/services">📋 Обслуживание</a>
+        <a href="/fillups">⛽️ Заправки</a>
+    </div>
+    <h1 class="hero-title">{car.brand} {car.model}</h1>
+    <p class="hero-subtitle">{car.year} · {car.engine} · {car.transmission}</p>
+    <div class="hero-mileage">📍 {car.current_mileage} км</div>
+</div>
+            <h1 class="hero-title">{car.brand} {car.model}</h1>
+            <p class="hero-subtitle">{car.year} · {car.engine} · {car.transmission}</p>
         </div>
-        <div class="car-card">
-            <img src="/static/inside_car_sunset.jpg" alt="Моя ласточка">
-            <div class="car-info">
-                <p><b>Марка:</b> {car.brand}</p>
-                <p><b>Модель:</b> {car.model}</p>
-                <p><b>Год:</b> {car.year}</p>
-                <p><b>Двигатель:</b> {car.engine}</p>
-                <p><b>Коробка:</b> {car.transmission}</p>
-                <p><b>Цвет:</b> {car.color}</p>
-                <p><b>Текущий пробег:</b> {car.current_mileage} км</p>
-            </div>
-        </div>
-
-        
-    </body>
-    </html>
-    '''
+    </section>
+</body>
+</html>
+'''
 
 
 @app.route('/services')
