@@ -272,17 +272,20 @@ body {
 }
 
 .hero-mileage {
-    display: block;
-    width: fit-content;
+    position: absolute;
+    top: 20px;
+    right: 20px;
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: white;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    margin-top: 16px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    z-index: 10;
 }
+
 
 
 .hero-nav {
