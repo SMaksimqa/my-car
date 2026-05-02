@@ -203,6 +203,13 @@ button.delete-btn:hover {
     text-decoration: none;
 }
 /* Hero-секция в стиле BMW */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
 .hero {
     position: fixed;
     top: 0;
@@ -211,6 +218,7 @@ button.delete-btn:hover {
     height: 100vh;
     overflow: hidden;
 }
+
 
 body {
     margin: 0;
