@@ -272,7 +272,8 @@ body {
 }
 
 .hero-mileage {
-    display: inline-block;
+    display: block;
+    width: fit-content;
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(10px);
     color: white;
@@ -281,8 +282,8 @@ body {
     font-size: 16px;
     font-weight: 500;
     margin-top: 16px;
-    align-self: flex-start;
 }
+
 
 .hero-nav {
     display: flex;
