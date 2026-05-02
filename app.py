@@ -471,20 +471,17 @@ def home():
     <title>Мой Селтос</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body style="padding: 0; max-width: none;">
+<body>
     <section class="hero">
         <img src="/static/inside_car_sunset.jpg" alt="Kia Seltos" class="hero-image">
-<div class="hero-overlay">
-    <div class="hero-nav">
-        <a href="/services">📋 Обслуживание</a>
-        <a href="/fillups">⛽️ Заправки</a>
-    </div>
-    <h1 class="hero-title">{car.brand} {car.model}</h1>
-    <p class="hero-subtitle">{car.year} · {car.engine} · {car.transmission}</p>
-    <div class="hero-mileage">📍 {car.current_mileage} км</div>
-</div>
+        <div class="hero-overlay">
+            <div class="hero-nav">
+                <a href="/services">📋 Обслуживание</a>
+                <a href="/fillups">⛽️ Заправки</a>
+            </div>
             <h1 class="hero-title">{car.brand} {car.model}</h1>
             <p class="hero-subtitle">{car.year} · {car.engine} · {car.transmission}</p>
+            <div class="hero-mileage">📍 {car.current_mileage} км</div>
         </div>
     </section>
 </body>
