@@ -473,15 +473,17 @@ def home():
 </head>
 <body>
     <section class="hero">
-    <img src="/static/inside_car_sunset.jpg" alt="Kia Seltos" class="hero-image">
-    <div class="hero-mileage">📍 {current_mileage} км</div>  ← перенесли сюда
-    <div class="hero-overlay">
-        <div class="hero-nav">...</div>
-        <h1>...</h1>
-        <p>...</p>
-    </div>
-</section>
-
+        <img src="/static/inside_car_sunset.jpg" alt="Kia Seltos" class="hero-image">
+        <div class="hero-mileage">📍 {car.current_mileage} км</div>
+        <div class="hero-overlay">
+            <div class="hero-nav">
+                <a href="/services">📋 Обслуживание</a>
+                <a href="/fillups">⛽️ Заправки</a>
+            </div>
+            <h1 class="hero-title">{car.brand} {car.model}</h1>
+            <p class="hero-subtitle">{car.year} · {car.engine} · {car.transmission}</p>
+        </div>
+    </section>
 </body>
 </html>
 '''
